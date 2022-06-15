@@ -7,39 +7,63 @@ class AllFilms extends StatefulWidget {
 }
 
 class _AllFilmsState extends State<AllFilms> {
-  static List<String> filmName = [
-    'Bir Zamanlar Anadoluda',
-    'Inception',
-    'Interstellar',
-    'The Hateful Eight',
-    'The Pianist'
-  ];
-  static List<String> filmImage = [
-    'assets/birzamanlaranadoluda.jpg',
-    'assets/inception.jpg',
-    'assets/interstellar.jpg',
-    'assets/thehatefuleight.jpg',
-    'assets/thepianist.jpg',
-  ];
-  final List<Film> filmList = List.generate(filmName.length,
-      (index) => Film('${filmName[index]}', '${filmImage[index]}'));
+  Future<List<Film>> tumFilmleriGoster() async {
+    var filmlerListesi = <Film>[];
+
+    var f1 = Film("Anadoluda", "birzamanlaranadoluda.png");
+    var f2 = Film("Django", "django.png");
+    var f3 = Film("Inception", "inception.png");
+    var f4 = Film("Interstaller", "interstellar.png");
+    var f5 = Film("The Hateful Eight", "thehatefuleight.png");
+    var f6 = Film("The Pianist", "thepianist.png");
+
+    filmlerListesi.add(f1);
+    filmlerListesi.add(f2);
+    filmlerListesi.add(f3);
+    filmlerListesi.add(f4);
+    filmlerListesi.add(f5);
+    filmlerListesi.add(f6);
+
+    return filmlerListesi;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: filmList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            child: ListTile(
-              title: Text(filmList[index].name),
-              leading: SizedBox(
-                width: 50,
-                height: 50,
-                child: Image.asset(filmList[index].imagePath),
+      body: FutureBuilder<List<Film>>(
+        future: tumFilmleriGoster(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            var filmlerListesi = snapshot.data;
+            return GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 2 / 3.5,
               ),
-            ),
-          );
+              itemCount: filmlerListesi!.length,
+              itemBuilder: (context, indeks) {
+                var film = filmlerListesi[indeks];
+                return Card(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset("assets/${film.imagePath}"),
+                      ),
+                      Text(
+                        film.name,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          } else {
+            return Center();
+          }
         },
       ),
     );

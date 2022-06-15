@@ -1,8 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({Key? key}) : super(key: key);
+
+  /*void dosyaOkuma() async {
+    File file = File("aboutText.txt");
+    var content = await file.readAsString();
+  }*/
 
   @override
   Widget build(BuildContext context) {

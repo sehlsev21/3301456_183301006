@@ -1,9 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ne_izlesem/Pages/About/AboutScreen.dart';
+import 'package:ne_izlesem/Pages/Home/CategoriesScreen.dart';
 import 'package:ne_izlesem/Pages/Home/HomeScreen.dart';
+import '../../../Service/auth.dart';
 import '../../Login/LogInScreen.dart';
 import '../AllFilmsScreen.dart';
+import '../EkstrasScreen.dart';
+import '../FavoriteFilmsScreen.dart';
 import '../ProfileScreen.dart';
+import '../SettingsScreen.dart';
 
 class HomeController extends StatefulWidget {
   const HomeController({Key? key}) : super(key: key);
@@ -13,11 +19,14 @@ class HomeController extends StatefulWidget {
 }
 
 class _HomeControllerState extends State<HomeController> {
+  AuthService _authService = AuthService();
+
   int currentIndex = 0;
   final screens = [
     Home(),
     Profile(),
     AllFilms(),
+    CategoriesScreen(),
     AboutScreen(),
   ];
 
@@ -32,13 +41,27 @@ class _HomeControllerState extends State<HomeController> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
+            DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.black38,
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0.1, 0.4, 0.7, 0.9],
+                  colors: [
+                    Color(0xFF9E9E9E),
+                    Color(0xFF757575),
+                    Color(0xFF616161),
+                    Color(0xFF424242),
+                  ],
+                ),
               ),
-              child: Text(
-                'Ne İzlesem',
-                style: TextStyle(color: Colors.white),
+              child: CircleAvatar(
+                radius: 65,
+                backgroundColor: Colors.white,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(90)),
+                  child: Image.asset('assets/neizlesem.jpg'),
+                ),
               ),
             ),
             ListTile(
@@ -47,13 +70,14 @@ class _HomeControllerState extends State<HomeController> {
                 color: Colors.black,
               ),
               title: Text(
-                "Ana Sayfa",
+                "Ana Sayfa (Vize)",
                 style: TextStyle(color: Colors.black),
               ),
               onTap: () {
                 setState(() {
                   currentIndex = 0;
                 });
+                Navigator.of(context).pop();
               },
             ),
             ListTile(
@@ -62,13 +86,14 @@ class _HomeControllerState extends State<HomeController> {
                 color: Colors.black,
               ),
               title: Text(
-                "Profil",
+                "Profil (Vize)",
                 style: TextStyle(color: Colors.black),
               ),
               onTap: () {
                 setState(() {
                   currentIndex = 1;
                 });
+                Navigator.of(context).pop();
               },
             ),
             ListTile(
@@ -77,39 +102,30 @@ class _HomeControllerState extends State<HomeController> {
                 color: Colors.black,
               ),
               title: Text(
-                "Tüm Filmler",
+                "Tüm Filmler (Vize)",
                 style: TextStyle(color: Colors.black),
               ),
               onTap: () {
                 setState(() {
                   currentIndex = 2;
                 });
+                Navigator.of(context).pop();
               },
             ),
             ListTile(
               leading: Icon(
-                Icons.star_rate,
+                Icons.theaters,
                 color: Colors.black,
               ),
               title: Text(
-                "Favori Filmler",
+                "Kategoriler (Final)",
                 style: TextStyle(color: Colors.black),
               ),
               onTap: () {
-                //Toast mesaj bastır.
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.settings,
-                color: Colors.black,
-              ),
-              title: Text(
-                "Ayarlar",
-                style: TextStyle(color: Colors.black),
-              ),
-              onTap: () {
-                //Toast
+                setState(() {
+                  currentIndex = 3;
+                });
+                Navigator.of(context).pop();
               },
             ),
             ListTile(
@@ -118,34 +134,34 @@ class _HomeControllerState extends State<HomeController> {
                 color: Colors.black,
               ),
               title: Text(
-                "Hakkında",
+                "Hakkında (Vize)",
                 style: TextStyle(color: Colors.black),
               ),
               onTap: () {
                 setState(() {
-                  currentIndex = 3;
+                  currentIndex = 4;
                 });
+                Navigator.of(context).pop();
               },
             ),
-            Center(
-              child: ListTile(
-                leading: Icon(
-                  Icons.movie,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  "Çıkış",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Login(),
-                    ),
-                  );
-                },
+            ListTile(
+              leading: Icon(
+                Icons.exit_to_app,
+                color: Colors.black,
               ),
+              title: Text(
+                "Çıkış",
+                style: TextStyle(color: Colors.black),
+              ),
+              onTap: () {
+                _authService.signOut();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Login(),
+                  ),
+                );
+              },
             ),
           ],
         ),

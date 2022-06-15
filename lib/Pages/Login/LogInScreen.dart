@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:ne_izlesem/Pages/Home/Controller/HomeController.dart';
+import '../../Service/auth.dart';
 import '../Signup/SignUpScreen.dart';
 
 class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
+
   @override
   State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  String username = '';
-  String password = '';
-  GlobalKey<FormState> _formKey = GlobalKey();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Form(
-          key: _formKey,
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -35,20 +38,23 @@ class _LoginState extends State<Login> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ClipRRect(
-                  // kırpma işlemi yapar (spesifik radius vermemizi sağlar)
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: CircleAvatar(
-                    radius: 100,
-                    child: Image.asset('assets/neizlesem.jpg'),
+                CircleAvatar(
+                  radius: 100,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    child: SizedBox(
+                        width: 200,
+                        height: 200,
+                        child: Image.asset('assets/neizlesem.jpg')),
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Container(
                   width: 300,
                   height: 50,
                   child: TextFormField(
-                    decoration: InputDecoration(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
                         labelStyle: TextStyle(color: Colors.white),
                         hintStyle: TextStyle(color: Colors.white24),
                         border: OutlineInputBorder(
@@ -58,25 +64,16 @@ class _LoginState extends State<Login> {
                             borderSide: BorderSide(color: Colors.yellow)),
                         enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.white)),
-                        labelText: "Kullanıcı Adı"),
-                    validator: (value) {
-                      return value!.isEmpty
-                          ? "Bu alanı boş bırakamazsınız."
-                          : null;
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        value = username;
-                      });
-                    },
+                        labelText: "Email"),
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Container(
                   width: 300,
                   height: 50,
                   child: TextFormField(
-                    decoration: InputDecoration(
+                    controller: _passwordController,
+                    decoration: const InputDecoration(
                         labelStyle: TextStyle(color: Colors.white),
                         hintStyle: TextStyle(color: Colors.white24),
                         border: OutlineInputBorder(
@@ -87,19 +84,9 @@ class _LoginState extends State<Login> {
                         enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.white)),
                         labelText: "Şifre"),
-                    validator: (value) {
-                      return value!.isEmpty
-                          ? "Bu alanı boş bırakamazsınız."
-                          : null;
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        value = password;
-                      });
-                    },
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -110,18 +97,17 @@ class _LoginState extends State<Login> {
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.black38)),
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomeController(),
-                              ),
-                            );
-                          } else {
-                            print("olmadı");
-                          }
+                          _authService
+                              .signIn(_emailController.text,
+                                  _passwordController.text)
+                              .then((value) {
+                            return Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeController()));
+                          });
                         },
-                        child: Text(
+                        child: const Text(
                           "Giriş Yap",
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
@@ -130,7 +116,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Container(
                       width: 100,
                       child: TextButton(
@@ -138,11 +124,11 @@ class _LoginState extends State<Login> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Sign(),
+                              builder: (context) => const Sign(),
                             ),
                           );
                         },
-                        child: Text(
+                        child: const Text(
                           "Kayıt Ol",
                           style: TextStyle(
                               fontWeight: FontWeight.w400,

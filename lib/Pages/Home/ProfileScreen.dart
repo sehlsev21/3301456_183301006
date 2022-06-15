@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ne_izlesem/Pages/Home/ChangePasswordScreen.dart';
 
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);
@@ -21,7 +22,6 @@ class Profile extends StatelessWidget {
         ),
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(
             height: 40,
@@ -56,7 +56,7 @@ class Profile extends StatelessWidget {
                   labelText: "İsim"),
             ),
           ),
-          Container(height: 20),
+          SizedBox(height: 20),
           Container(
             width: 300,
             height: 50,
@@ -119,6 +119,12 @@ class Profile extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       //Şifre değiştirme sayfasına gidilecek
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChangePassword(),
+                        ),
+                      );
                     },
                     style: ButtonStyle(
                         backgroundColor:

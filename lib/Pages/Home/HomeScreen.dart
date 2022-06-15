@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ne_izlesem/Pages/Home/ProfileScreen.dart';
-
+import '../About/AboutScreen.dart';
 import 'AllFilmsScreen.dart';
+import 'ImdbScreen.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -12,8 +13,18 @@ class Home extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
+            Container(
+              margin: EdgeInsets.all(10),
+              child: Text(
+                "Ana Sayfa",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
             Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: EdgeInsets.only(left: 10, right: 10),
               child: SizedBox(
                 height: 100,
                 width: double.infinity,
@@ -188,7 +199,7 @@ class Home extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AllFilms(),
+                            builder: (context) => AboutScreen(),
                           ),
                         );
                       },
@@ -225,13 +236,19 @@ class Home extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
-              height: 20,
+            Expanded(
+              child: new Container(
+                  margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+                  child: Divider(
+                    color: Colors.black,
+                    height: 36,
+                    thickness: 2,
+                  )),
             ),
-            Align(
-              alignment: Alignment.center,
+            Container(
+              margin: EdgeInsets.all(10),
               child: Text(
-                "Ana Sayfa",
+                "Popüler Filmler",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -239,22 +256,82 @@ class Home extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(12.0),
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black45,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: SizedBox(
+                height: 200,
+                width: double.infinity,
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    Image.asset("assets/inception.png"),
+                    SizedBox(
+                      width: 10,
                     ),
-                    width: double.infinity,
-                    height: 530,
-                  ),
-                ],
+                    Image.asset("assets/birzamanlaranadoluda.png"),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Image.asset("assets/interstellar.png"),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Image.asset("assets/thehatefuleight.png"),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Image.asset("assets/thepianist.png"),
+                  ],
+                ),
               ),
-            )
+            ),
+            Expanded(
+              child: new Container(
+                  margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+                  child: Divider(
+                    color: Colors.black,
+                    height: 36,
+                    thickness: 2,
+                  )),
+            ),
+            Container(
+              margin: EdgeInsets.all(10),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Resmi IMDB sayfasına gitmek için tıklayınız:",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Container(
+              width: 350,
+              height: 100,
+              margin: EdgeInsets.symmetric(horizontal: 50, vertical: 50),
+              child: ElevatedButton(
+                child: Text(
+                  "IMDB Sayfasına Git",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => IMDBScreen(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(30))),
+                  primary: Colors.yellow,
+                ),
+              ),
+            ),
           ],
         ),
       ),

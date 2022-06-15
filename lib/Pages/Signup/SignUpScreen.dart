@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
+import '../../Service/auth.dart';
 import '../Login/LogInScreen.dart';
 
-class Sign extends StatelessWidget {
+class Sign extends StatefulWidget {
   const Sign({Key? key}) : super(key: key);
+
+  @override
+  State<Sign> createState() => _SignState();
+}
+
+class _SignState extends State<Sign> {
+  final TextEditingController _UserNameController = TextEditingController();
+
+  final TextEditingController _emailController = TextEditingController();
+
+  final TextEditingController _passwordController = TextEditingController();
+
+  AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +55,7 @@ class Sign extends StatelessWidget {
                         borderSide: BorderSide(color: Colors.yellow)),
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white)),
-                    labelText: "İsim"),
+                    labelText: "İsim-Soyisim"),
               ),
             ),
             Container(height: 20),
@@ -49,6 +63,7 @@ class Sign extends StatelessWidget {
               width: 300,
               height: 50,
               child: TextField(
+                controller: _emailController,
                 decoration: InputDecoration(
                     labelStyle: TextStyle(color: Colors.white),
                     hintStyle: TextStyle(color: Colors.white24),
@@ -58,7 +73,7 @@ class Sign extends StatelessWidget {
                         borderSide: BorderSide(color: Colors.yellow)),
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white)),
-                    labelText: "Soyisim"),
+                    labelText: "Email"),
               ),
             ),
             Container(height: 20),
@@ -66,6 +81,7 @@ class Sign extends StatelessWidget {
               width: 300,
               height: 50,
               child: TextField(
+                controller: _UserNameController,
                 decoration: InputDecoration(
                     labelStyle: TextStyle(color: Colors.white),
                     hintStyle: TextStyle(color: Colors.white24),
@@ -83,6 +99,7 @@ class Sign extends StatelessWidget {
               width: 300,
               height: 50,
               child: TextField(
+                controller: _passwordController,
                 decoration: InputDecoration(
                     labelStyle: TextStyle(color: Colors.white),
                     hintStyle: TextStyle(color: Colors.white24),
@@ -100,12 +117,13 @@ class Sign extends StatelessWidget {
               width: 100,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Login(),
-                    ),
-                  );
+                  _authService
+                      .createPerson(_UserNameController.text,
+                          _emailController.text, _passwordController.text)
+                      .then((value) {
+                    return Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Login()));
+                  });
                 },
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.black38)),
